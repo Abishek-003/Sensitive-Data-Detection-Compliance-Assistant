@@ -4,8 +4,8 @@ import os
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SQLITE_DB_PATH = BASE_DIR / "app.db"
 TMP_DIR = BASE_DIR / "tmp"
+SQLITE_DB_PATH = TMP_DIR / "app.db"
 CHROMA_DIR = BASE_DIR / "chromadb"
 
 DEFAULT_MODE = "single"

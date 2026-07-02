@@ -6,10 +6,11 @@ from uuid import uuid4
 from datetime import datetime
 from datetime import timedelta
 
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from app.db import SessionLocal
-from app.config import TMP_DIR, SESSION_TTL_MINUTES
+from app.db import Base, SessionLocal, engine
+from app.config import SQLITE_DB_PATH, TMP_DIR, SESSION_TTL_MINUTES
 from app.models.orm import SessionORM, DocumentORM, FindingORM, ChatMessageORM
 from app.models.schemas import SessionInfo, DocumentInfo, Finding, ChatMessage
 from app.services.compliance import normalize_entity_type
@@ -27,6 +28,22 @@ class SessionManager:
     def __init__(self, tmp_dir: Path = TMP_DIR):
         self.tmp_dir = tmp_dir
         self.session_ttl_minutes = SESSION_TTL_MINUTES
+
+    @staticmethod
+    def _reset_sqlite_storage() -> None:
+        try:
+            engine.dispose()
+        except Exception:
+            pass
+        try:
+            if SQLITE_DB_PATH.exists():
+                SQLITE_DB_PATH.unlink()
+        except Exception:
+            pass
+        try:
+            Base.metadata.create_all(bind=engine)
+        except Exception:
+            pass
 
     @staticmethod
     def _finding_key(
@@ -52,21 +69,28 @@ class SessionManager:
         If mode == 'single', create a brand new session.
         You can later add logic to delete previous sessions here.
         """
-        db: Session = SessionLocal()
-        try:
-            session_id = str(uuid4())
-            obj = SessionORM(
-                id=session_id,
-                mode=mode,
-                created_at=datetime.utcnow(),
-                updated_at=datetime.utcnow(),
-            )
-            db.add(obj)
-            db.commit()
-            db.refresh(obj)
-            return SessionInfo.model_validate(obj)
-        finally:
-            db.close()
+        for attempt in range(2):
+            db: Session = SessionLocal()
+            try:
+                session_id = str(uuid4())
+                obj = SessionORM(
+                    id=session_id,
+                    mode=mode,
+                    created_at=datetime.utcnow(),
+                    updated_at=datetime.utcnow(),
+                )
+                db.add(obj)
+                db.commit()
+                db.refresh(obj)
+                return SessionInfo.model_validate(obj)
+            except SQLAlchemyError:
+                db.rollback()
+                if attempt == 0:
+                    self._reset_sqlite_storage()
+                    continue
+                raise
+            finally:
+                db.close()
 
     def get_session(self, session_id: str) -> SessionInfo | None:
         db: Session = SessionLocal()

@@ -153,10 +153,6 @@ Base.metadata.create_all(bind=engine)
 st.set_page_config(page_title="Sensitive RAG + Compliance", layout="wide")
 st.title("Sensitive RAG + Compliance")
 
-if "session_id" not in st.session_state:
-    sess = session_manager.create_session(mode="single")
-    st.session_state["session_id"] = sess.id
-
 st.session_state.setdefault("active_document_id", None)
 st.session_state.setdefault("last_index_result", None)
 st.session_state.setdefault("conversation_summary", "")
@@ -166,6 +162,10 @@ if not st.session_state.get("storage_purged", False):
     _purge_all_storage()
     Base.metadata.create_all(bind=engine)
     st.session_state["storage_purged"] = True
+
+if "session_id" not in st.session_state:
+    sess = session_manager.create_session(mode="single")
+    st.session_state["session_id"] = sess.id
 
 session_id = st.session_state["session_id"]
 ensure_browser_cleanup_server(clear_session_everywhere, port=SESSION_CLEANUP_PORT)
