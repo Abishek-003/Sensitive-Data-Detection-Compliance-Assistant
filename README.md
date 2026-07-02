@@ -54,13 +54,6 @@ streamlit run app/main.py
 
 The app will start the Streamlit UI and create local storage automatically.
 
-### 6. Optional NLP model setup
-
-If spaCy is used for NER in your environment, install the English model:
-
-```bash
-python -m spacy download en_core_web_sm
-```
 
 ## Architecture Overview
 
@@ -155,4 +148,3 @@ The detection strategy is intentionally layered:
 
 - Local prototype: http://localhost:8501
 
-If you deploy this publicly later, replace the link above with the hosted URL.
