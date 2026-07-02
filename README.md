@@ -139,12 +139,11 @@ The detection strategy is intentionally layered:
 - Add a stronger OCR path for scanned or image-only PDFs
 - Improve evaluation with a labeled test set for precision/recall measurement
 - Add background jobs for indexing to reduce UI wait time
-- Make per-entity explanations richer in the dashboard
 - Add user-configurable retention windows for session cleanup
 - Expand compliance mapping and reporting views
 - Add a small benchmark page for comparing regex-only vs hybrid vs LLM-assisted detection
 
 ## Working Prototype Deployment Link
 
-- Local prototype: http://localhost:8501
+- Local prototype: https://sensitive-data-detection-compliance-assistant-v9tgqi3mqr4qu2rf.streamlit.app/
 
