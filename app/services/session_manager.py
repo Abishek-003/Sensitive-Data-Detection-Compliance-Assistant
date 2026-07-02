@@ -219,6 +219,7 @@ class SessionManager:
                     if finding.source == "llm" and existing_row.source != "llm":
                         existing_row.source = "llm"
                         existing_row.confidence = finding.confidence
+                        existing_row.is_placeholder = getattr(finding, "is_placeholder", False)
                     continue
                 db.add(
                     FindingORM(
@@ -230,6 +231,7 @@ class SessionManager:
                         source=finding.source,
                         masked_value=finding.masked_value,
                         confidence=finding.confidence,
+                        is_placeholder=getattr(finding, "is_placeholder", False),
                         compliance_tags="[]",
                         created_at=finding.created_at or datetime.utcnow(),
                     )
@@ -261,6 +263,7 @@ class SessionManager:
                     source=row.source,
                     masked_value=row.masked_value,
                     confidence=row.confidence,
+                    is_placeholder=bool(getattr(row, "is_placeholder", False)),
                     compliance_tags=[],
                     created_at=row.created_at,
                 )

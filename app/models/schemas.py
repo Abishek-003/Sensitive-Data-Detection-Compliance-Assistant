@@ -53,6 +53,7 @@ class Finding(BaseModel):
     source: str
     masked_value: str
     confidence: float
+    is_placeholder: bool = False
     compliance_tags: list[str] = Field(default_factory=list)
     created_at: datetime | None = None
 

@@ -8,6 +8,7 @@ from sqlalchemy import (
     ForeignKey,
     Float,
     Text,
+    Boolean,
 )
 from sqlalchemy.orm import relationship
 
@@ -77,6 +78,7 @@ class FindingORM(Base):
     source = Column(String, nullable=False)
     masked_value = Column(Text, nullable=False)
     confidence = Column(Float, nullable=False, default=0.0)
+    is_placeholder = Column(Boolean, nullable=False, default=False)
     compliance_tags = Column(Text, nullable=False, default="[]")
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
