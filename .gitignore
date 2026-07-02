@@ -1,0 +1,22 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# App runtime data
+app.db
+tmp/
+chromadb/
+
+# Local environment secrets
+.env
+.streamlit/

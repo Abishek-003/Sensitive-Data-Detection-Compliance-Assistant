@@ -1,0 +1,46 @@
+# Core app
+fastapi
+uvicorn[standard]
+streamlit
+
+# Database + models
+SQLAlchemy
+pydantic
+pydantic-settings
+
+# Storage / retrieval
+chromadb
+rank-bm25
+
+# Embeddings & rerankers
+sentence-transformers      # for BAAI/bge-small-en-v1.5 [web:65]
+transformers
+torch
+
+# LLM client
+openai                     # GPT-4o-mini / GPT-4.1 API [web:17]
+langchain-core
+langchain-openai
+
+# NLP / NER
+spacy
+# later run: python -m spacy download en_core_web_sm
+
+# PDF / document parsing
+PyMuPDF                    # fitz – PDF text extraction [web:27]
+pandas
+python-magic
+pillow
+pytesseract
+
+# Utilities
+python-dotenv
+tqdm
+orjson
+typing-extensions
+
+# Dev / testing (optional)
+pytest
+black
+isort
+ruff
